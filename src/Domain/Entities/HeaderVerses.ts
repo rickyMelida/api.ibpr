@@ -1,4 +1,4 @@
-export class HeaderVerse {
+class HeaderVerses {
     constructor(
         public Id: number,
         public Section: string,
@@ -8,3 +8,5 @@ export class HeaderVerse {
         public Verse: number,
     ) {}
 }
+
+export default HeaderVerses;

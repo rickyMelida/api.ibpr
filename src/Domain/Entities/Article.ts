@@ -1,4 +1,4 @@
-export class Aticle {
+class Article {
   constructor(
     public Id: number,
     public Author: string,
@@ -10,3 +10,5 @@ export class Aticle {
     public IdComment?: number
   ) {}
 }
+
+export default Article;

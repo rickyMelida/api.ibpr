@@ -1,4 +1,4 @@
-export class Schedule {
+class Schedule {
     constructor(
         public Id: number,
         public Title: string,
@@ -6,3 +6,6 @@ export class Schedule {
         public Hour: string,
     ) {}
 }
+
+
+export default Schedule;

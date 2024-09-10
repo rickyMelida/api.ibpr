@@ -1,4 +1,4 @@
-export class Verse {
+class Verse {
   constructor(
     public Id: number,
     public Text: string,
@@ -7,3 +7,6 @@ export class Verse {
     public Versse: number
   ) {}
 }
+
+
+export default Verse;

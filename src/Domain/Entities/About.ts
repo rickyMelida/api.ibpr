@@ -1,4 +1,4 @@
-export class About {
+class About {
   constructor(
     public Id: number,
     public Belief: string,
@@ -6,3 +6,5 @@ export class About {
     public AboutUs: string
   ) {}
 }
+
+export default About;

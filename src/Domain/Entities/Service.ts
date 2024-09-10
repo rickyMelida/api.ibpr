@@ -1,4 +1,4 @@
-export class Service {
+class Service {
     constructor(
         public Id: number,
         public Name: string,
@@ -8,3 +8,5 @@ export class Service {
         public IdImage: number,
     ){}
 }
+
+export default Service;

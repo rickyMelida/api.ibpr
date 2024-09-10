@@ -1,4 +1,4 @@
-export class Activity {
+class Activity {
   constructor(
     public Id: number,
     public Name: string,
@@ -8,3 +8,5 @@ export class Activity {
     public IdImage: number
   ) {}
 }
+
+export default Activity;

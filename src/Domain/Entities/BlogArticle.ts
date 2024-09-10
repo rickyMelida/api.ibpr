@@ -1,7 +1,7 @@
-import { Image } from "../Common/Image";
-import { Verse } from "./Verse";
+import Image from "../Common/Image";
+import Verse from "./Verse";
 
-export class BlogArticle {
+class BlogArticle {
     constructor(
         public images: Array<Image>,
         public verses: Array<Verse>,
@@ -10,3 +10,5 @@ export class BlogArticle {
 
     }
 }
+
+export default BlogArticle;

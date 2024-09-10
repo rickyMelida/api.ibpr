@@ -1,4 +1,4 @@
-export class Comment {
+class Comment {
     constructor(
         public Id: string,
         public Text: string,
@@ -8,3 +8,5 @@ export class Comment {
 
     }
 }
+
+export default Comment;
