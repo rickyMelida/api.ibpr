@@ -5,8 +5,8 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
-    "dev": "ts-node src/app/index.ts",
-    "dev:watch": "nodemon src/app/index.ts"
+    "dev": "ts-node src/WebApi/index.ts",
+    "dev:watch": "nodemon src/WebApi/index.ts"
   },
   "keywords": [],
   "author": "",
