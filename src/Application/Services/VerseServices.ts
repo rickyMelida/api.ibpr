@@ -4,8 +4,6 @@ import HeaderVerses from "../../Domain/Entities/HeaderVerses";
 import IVerseServices from "../Interfaces/IVerseServices";
 import IMainVerseRepository from "../Repositories/IMainVerseRepository";
 import IVerseRepository from "../Repositories/IVerseRepository";
-import { addDoc, collection } from "firebase/firestore";
-import { db } from "../../persistence/db/firebase.config";
 import ISectionRepository from "../Repositories/ISectionRepository";
 import MainVerse from "../../Domain/Entities/MainVerse";
 import Verse from "../../Domain/Entities/Verse";
@@ -27,21 +25,30 @@ class VerseService implements IVerseServices {
             (this._sectionRepository = sectionRepository);
     }
 
-    async GetMainVerses(): Promise<Array<any>> {
+    async GetMainVerses(): Promise<Array<HeaderVerses>> {
         const verses = await this._verseRepository.GetVerses();
-        const result: HeaderVerses[] = verses.map((verse) => {
+        const sections = await this._sectionRepository.GetSections();
+        const mainVerse = await this._mainVerseRepository.GetMainVerses();
+
+        const result = mainVerse.map((mainVerse) => {
+            const verse = verses.find((verse) => verse.Id === mainVerse.IdVerse);
+            const section = sections.find((section) => section.Id === mainVerse.Section);
             return {
-                Id: verse.Id,
-                Section: "section",
-                Text: verse.Text,
-                Book: verse.Book,
-                Chapter: verse.Chapter,
-                Verse: verse.Versse,
+                Id: mainVerse.Id,
+                Section: section?.Name,
+                Text: verse?.Text,
+                Book: verse?.Book,
+                Chapter: verse?.Chapter,
+                Verse: verse?.Versse,
             };
         });
 
-        return await verses;
+        if(result.length > 0)
+            return result as Array<HeaderVerses>;
+
+        return [];
     }
+    
     async SetMainVerses(headerVerse: HeaderVerses): Promise<DefaultResponse> {
         try {
             const idMainVerse = (await this._mainVerseRepository.GetLastId()) + 1;
@@ -67,6 +74,7 @@ class VerseService implements IVerseServices {
 
             return { StatusCode: 0, Message: "Ok" };
         } catch (error: Error | any) {
+            console.log(error);
             throw new Error(error.message);
         }
     }

@@ -7,7 +7,6 @@ interface ISectionRepository {
     SetSection(section: Section): Promise<Section>;
     UpdateSection(id: number, sectionUpdate: Section): Promise<void>;
     DeleteSection(id: number): Promise<void>;
-    GetLastId(): Promise<number>;
 }
 
 export default ISectionRepository;

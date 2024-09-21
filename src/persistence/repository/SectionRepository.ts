@@ -1,49 +1,42 @@
-import {
-    addDoc,
-    collection,
-    getDoc,
-    getDocs,
-    orderBy,
-    query,
-    where,
-} from "firebase/firestore";
 import ISectionRepository from "../../Application/Repositories/ISectionRepository";
 import Section from "../../Domain/Entities/Section";
 import { db } from "../db/firebase.config";
+import IFirebaseHandler from "../../Application/Interfaces/IFirebaseHandler";
+import FirebaseHandler from "../db/FirebaseHandler";
+import COLLECTIONS from "../../Domain/constants/Collections";
 
 export default class SectionRepository implements ISectionRepository {
-    GetSections(): Promise<Array<Section>> {
-        throw new Error("Method not implemented.");
+
+    private _dbHandler: IFirebaseHandler<Section>;
+
+    constructor() {
+        this._dbHandler = new FirebaseHandler(db, COLLECTIONS.SECTION);
     }
-    GetSection(id: number): Promise<Section> {
-        throw new Error("Method not implemented.");
+
+    async GetSections(): Promise<Array<Section>> {
+        return await this._dbHandler.getAll();
     }
+
+    async GetSection(id: number): Promise<Section> {
+        return await this._dbHandler.getById(id);
+    }
+
     async GetSectionId(sectionName: string): Promise<number> {
         try {
-            const q = await query(
-                collection(db, "sections"),
-                where("Name", "==", sectionName)
-            );
-            let id: number = 0;
+            const dataResult = await this._dbHandler.getBy("Name", sectionName);
+            return dataResult[0].Id;
 
-            const querySnapshot = await getDocs(q);
-
-            querySnapshot.forEach((doc) => {
-                id = doc.data().Id;
-            });
-
-            return id;
         } catch (error) {
             return 0;
         }
     }
     async SetSection(section: Section): Promise<Section> {
-        try {
-            const docRef = await addDoc(collection(db, "sections"), section);
+        const hasCreated = await this._dbHandler.create(section);
+
+        if(hasCreated)
             return section;
-        } catch (error: Error | any) {
-            throw new Error(error.message);
-        }
+
+        throw new Error("Error al crear una nueva seccion");
     }
 
     UpdateSection(id: number, sectionUpdate: Section): Promise<void> {
@@ -53,18 +46,4 @@ export default class SectionRepository implements ISectionRepository {
         throw new Error("Method not implemented.");
     }
 
-    async GetLastId(): Promise<number> {
-        try {
-            const q = query(collection(db, "sections"), orderBy("Id", "desc"));
-            const querySnapshot = await getDocs(q);
-
-            const sections: any[] = [];
-            querySnapshot.forEach((doc) => {
-                sections.push(doc.data().Id);
-            });
-            return sections[0];
-        } catch (error) {
-            return 0;
-        }
-    }
 }

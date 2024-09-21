@@ -25,7 +25,7 @@ class VerseController {
             const versesServices = await this._IVerseService.SetMainVerses(verse);
             res.json(versesServices);
         } catch (error) {
-            res.status(500).json({ error: "Failed to fetch user" });
+            res.status(500).json({ error });
         }
     };
 }

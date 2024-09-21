@@ -5,6 +5,8 @@ import IVerseServices from "../Application/Interfaces/IVerseServices";
 import VerseService from "../Application/Services/VerseServices";
 import IVerseRepository from "../Application/Repositories/IVerseRepository";
 import VerseRepository from "./repository/VerseRepository";
+import ISectionRepository from "../Application/Repositories/ISectionRepository";
+import SectionRepository from "./repository/SectionRepository";
 
 const DependencyInyeccion = () => {
   container.register<IMainVerseRepository>("IMainVerseRepository", {
@@ -17,6 +19,10 @@ const DependencyInyeccion = () => {
 
   container.register<IVerseServices>("IVerseServices", {
     useClass: VerseService,
+  });
+
+  container.register<ISectionRepository>("ISectionRepository", {
+    useClass: SectionRepository,
   });
 };
 

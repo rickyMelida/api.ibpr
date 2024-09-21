@@ -1,57 +1,50 @@
 import IMainVerseRepository from "../../Application/Repositories/IMainVerseRepository";
 import MainVerse from "../../Domain/Entities/MainVerse";
 import { db } from "../db/firebase.config";
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import IFirebaseHandler from "../../Application/Interfaces/IFirebaseHandler";
+import FirebaseHandler from "../db/FirebaseHandler";
+import COLLECTIONS from "../../Domain/constants/Collections";
+
 
 class MainVerseRepository implements IMainVerseRepository {
-    GetMainVerse(id: number): Promise<MainVerse> {
-        throw new Error("Method not implemented.");
+    private _dbHandler: IFirebaseHandler<MainVerse>;
+
+    constructor() {
+        this._dbHandler = new FirebaseHandler(db, COLLECTIONS.MAIN_VERSES);
     }
+
+    async GetMainVerse(id: number): Promise<MainVerse> {
+        return await this._dbHandler.getById(id);
+    }
+
     async GetMainVerses(): Promise<Array<MainVerse>> {
-        try {
-            const mainVersesCollection = collection(db, "mainVerses");
-            const querySnapshot = await getDocs(mainVersesCollection);
-
-            const mainVerses: MainVerse[] = [];
-            
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                const mainVerse = new MainVerse(
-                    Number(doc.id),
-                    data.Section,
-                    data.IdVerse
-                );
-                mainVerses.push(mainVerse);
-            });
-
-            return mainVerses;
-        } catch (error) {
-            console.error("Error getting MainVerses:", error);
-            throw error;
-        }
+        return await this._dbHandler.getAll();
     }
 
     async SetMainVerse(mainVerse: MainVerse): Promise<MainVerse> {
-        try {
-            const docRef = doc(db, "mainVerses", mainVerse.Id.toString());
+        const hasCreated = await this._dbHandler.create(mainVerse);
 
-            const dataToStore = { ...mainVerse };
-            await setDoc(docRef, dataToStore);
-
+        if(hasCreated)
             return mainVerse;
-        } catch (error) {
-            console.error("Error setting MainVerse:", error);
-            throw error;
-        }
+
+        throw new Error("No se pudo insertar el versiculo principal");
     }
+
     UpdateMainVerse(id: number, mainVerseUpdate: MainVerse): Promise<void> {
         throw new Error("Method not implemented.");
     }
     DeleteMainVerse(id: number): Promise<void> {
         throw new Error("Method not implemented.");
     }
-    GetLastId(): Promise<number> {
-        throw new Error("Method not implemented.");
+    async GetLastId(): Promise<number> {
+        try {
+            const data = await this.GetMainVerses();
+            const dataSorted = data.sort((a, b) => a.Id - b.Id);
+            
+            return dataSorted[0].Id
+        } catch (error) {
+            return 0;
+        }
     }
 }
 

@@ -1,36 +1,34 @@
 import { injectable } from "tsyringe";
 import IVerseRepository from "../../Application/Repositories/IVerseRepository";
 import Verse from "../../Domain/Entities/Verse";
-import { addDoc, collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { db } from "../db/firebase.config";
+import IFirebaseHandler from "../../Application/Interfaces/IFirebaseHandler";
+import FirebaseHandler from "../db/FirebaseHandler";
+import COLLECTIONS from "../../Domain/constants/Collections";
 
 @injectable()
 class VerseRepository implements IVerseRepository {
-    async GetVerses(): Promise<Array<any>> {
-        let result: any[] = [];
+    private _dbHandler: IFirebaseHandler<Verse>;
 
-        const querySnapshot = await getDocs(collection(db, "verses"));
-        
-        await querySnapshot.forEach((doc) => {
-          result.push(doc.data());
-        });
-
-        if(result.length === 0)
-            throw new Error("No verses found");
-
-        return result;
+    constructor() {
+        this._dbHandler = new FirebaseHandler(db, COLLECTIONS.VERSE);
     }
+
+    async GetVerses(): Promise<Array<Verse>> {
+        return await this._dbHandler.getAll();
+    }
+
     GetVerse(Id: number): Promise<Verse> {
         throw new Error("Method not implemented.");
     }
-    async SetVerse(verse: Verse): Promise<Verse> {
-        try {
-            const docRef = await addDoc(collection(db, "verses"), verse);
 
-            return verse;
-        } catch (error) {
-            throw new Error("Method not implemented.");
-        }
+    async SetVerse(verse: Verse): Promise<Verse> {
+        const hasCreated = await this._dbHandler.create(verse);
+
+        if(hasCreated)
+            return verse
+        
+        throw new Error("No se pudo insertar el nuevo versiculo")
     }
 
     UpdateVerse(id: number, verse: Verse): Promise<Verse> {
@@ -40,8 +38,15 @@ class VerseRepository implements IVerseRepository {
         throw new Error("Method not implemented.");
     }
 
-    GetLastId(): Promise<number> {
-        throw new Error("Method not implemented.");
+    async GetLastId(): Promise<number> {
+        try {
+            const data = await this.GetVerses();
+            const dataSorted = data.sort((a, b) => a.Id - b.Id);
+            
+            return dataSorted[0].Id
+        } catch (error) {
+            return 0;
+        }
     }
 }
 
