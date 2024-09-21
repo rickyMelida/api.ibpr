@@ -1,21 +1,33 @@
 import { Request, Response } from "express";
-import {} from "../../Application/Services/VerseServices";
 import IVerseServices from "../../Application/Interfaces/IVerseServices";
 import { inject, injectable } from "tsyringe";
-import IVerseController from "../../Application/IControllers/IVerseController"
 
 @injectable()
-class VerseController implements IVerseController {
-  _IVerseService: IVerseServices;
+class VerseController {
+    private _IVerseService: IVerseServices;
 
-  constructor(@inject("IVerseServices") IVerseServices: IVerseServices) {
-    this._IVerseService = IVerseServices;
-  }
+    constructor(@inject("IVerseServices") IVerseService: IVerseServices) {
+        this._IVerseService = IVerseService;
+    }
 
-  getHeaderVerses = async (req: Request, res: Response) => {
-    const versesServicces = await this._IVerseService.GetMainVerses();
-    res.send("¡Hello verses!");
-  };
+    getHeaderVerses = async (req: Request, res: Response): Promise<void> => {
+        try {
+            const versesServicces = await this._IVerseService.GetMainVerses();
+            res.json(versesServicces);
+        } catch (error) {
+            res.status(500).json({ error: "Failed to fetch user" });
+        }
+    };
+
+    setHeaderVerse = async (req: Request, res: Response): Promise<void> => {
+        try {
+            const verse = req.body;
+            const versesServices = await this._IVerseService.SetMainVerses(verse);
+            res.json(versesServices);
+        } catch (error) {
+            res.status(500).json({ error: "Failed to fetch user" });
+        }
+    };
 }
 
 export default VerseController;

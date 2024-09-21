@@ -1,7 +1,7 @@
 class Section {
     constructor(
         public Id: number, 
-        public Section: string,
+        public Name: string,
     ) {}
 }
 
