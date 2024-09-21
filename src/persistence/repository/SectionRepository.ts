@@ -30,6 +30,15 @@ export default class SectionRepository implements ISectionRepository {
             return 0;
         }
     }
+
+    async GetSectionName(id: number): Promise<string> {
+        try {
+            return (await this._dbHandler.getById(id)).Name;
+
+        } catch (error) {
+            throw new Error(`No existe seccion con el Id ${id} `);
+        }
+    }
     async SetSection(section: Section): Promise<Section> {
         const hasCreated = await this._dbHandler.create(section);
 

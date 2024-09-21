@@ -13,7 +13,8 @@ class CoverImagesService implements ICoverImagesService {
     private _sectionRepository: ISectionRepository;
 
     constructor(
-        @inject("ICoverImageRepository") coverImageRepository: ICoverImageRepository,
+        @inject("ICoverImageRepository")
+        coverImageRepository: ICoverImageRepository,
         @inject("IImageRepository") imageRepository: IImageRepository,
         @inject("ISectionRepository") sectionRepository: ISectionRepository
     ) {
@@ -29,30 +30,58 @@ class CoverImagesService implements ICoverImagesService {
 
         const result = coverImages.map((coverImage) => {
             const image = images.find((image) => image.Id === coverImage.Id);
-            const section = sections.find((section) => section.Id === coverImage.Section);
+            const section = sections.find(
+                (section) => section.Id === coverImage.Section
+            );
             return {
                 Id: coverImage.Id,
-                Name: section?.Name,
+                Name: image?.Name,
                 Section: section?.Name,
                 Picture: image?.Picture,
             };
         });
 
-        if(result.length > 0)
+        if (result.length > 0) 
             return result as Array<CoverImagesDetails>;
 
         return [];
     }
-    async GetCoverImagesDetails(id: number): Promise<CoverImagesDetails | null> {
+    async GetCoverImagesDetails(id: number ): Promise<CoverImagesDetails | null> {
         const data = await this.GetCoverImages();
-        
-        return data.find(e => e.Id === id) ?? null;
+
+        return data.find((e) => e.Id === id) ?? null;
     }
 
     async SetCoverImages(coverImagesDetails: CoverImageRequest): Promise<CoverImagesDetails> {
-        const lastId = await this._coverImageRepository.GetLastIdCoverImage() + 1;
-        throw new Error("");
+        try {
 
+            const coverImageLastId = (await this._coverImageRepository.GetLastIdCoverImage()) + 1;
+            const imageLastId = (await this._imageRepository.GetLastIdImage()) + 1;
+            const sectionName = await this._sectionRepository.GetSectionName(coverImagesDetails.Section);
+
+
+            await this._imageRepository.SetImage({
+                Id: imageLastId,
+                Picture: coverImagesDetails.Picture,
+                Name: coverImagesDetails.Name,
+            });
+
+            await this._coverImageRepository.SetCoverImage({
+                Id: coverImageLastId,
+                Section: coverImagesDetails.Section,
+                Image: imageLastId,
+            });
+
+            return {
+                Id: coverImageLastId,
+                Name: coverImagesDetails.Name,
+                Picture: coverImagesDetails.Picture,
+                Section: sectionName,
+            };
+
+        }catch(error: Error | any) {
+            throw new Error(error.message);
+        }
     }
 }
 

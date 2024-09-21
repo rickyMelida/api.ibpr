@@ -11,6 +11,8 @@ import ICoverImageRepository from "../Application/Repositories/ICoverImageReposi
 import CoverImageRepository from "./repository/CoverImageRepository";
 import IImageRepository from "../Application/Repositories/IImageRepository";
 import ImageRepository from "./repository/ImageRepository";
+import ICoverImagesService from "../Application/Interfaces/ICoverImagesService";
+import CoverImagesService from "../Application/Services/CoverImagesServices";
 
 const DependencyInyeccion = () => {
   container.register<IMainVerseRepository>("IMainVerseRepository", {
@@ -35,6 +37,10 @@ const DependencyInyeccion = () => {
 
   container.register<IImageRepository>("IImageRepository", {
     useClass: ImageRepository,
+  });
+
+  container.register<ICoverImagesService>("ICoverImagesService", {
+    useClass: CoverImagesService,
   });
 };
 

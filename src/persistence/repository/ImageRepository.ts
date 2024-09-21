@@ -19,10 +19,6 @@ class ImageRepository implements IImageRepository {
         return await this._dbHandler.getAll(); 
     }
 
-    async GetUrlImage(base64Image: string, imageName: string): Promise<string> {
-        return await this._dbHandler.uploadImage(base64Image, imageName);
-    }
-
     async SetImage(image: Image): Promise<Image> {
         image.Picture = await this._dbHandler.uploadImage(image.Picture, image.Name);
         const hasCreated = await this._dbHandler.create(image);
@@ -39,8 +35,15 @@ class ImageRepository implements IImageRepository {
     Delete(id: number): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
-    GetLastIdImage(): Promise<number> {
-        throw new Error("Method not implemented.");
+    async GetLastIdImage(): Promise<number> {
+        try {
+            const data = await this.GetImages();
+            const dataSorted = data.sort((a, b) => b.Id - a.Id);
+            
+            return dataSorted[0].Id
+        } catch (error) {
+            return 0;
+        }
     }
     
 }

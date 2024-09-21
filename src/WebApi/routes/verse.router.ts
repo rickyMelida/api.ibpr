@@ -1,13 +1,11 @@
 import { Router } from "express";
 import { container } from "tsyringe";
 import VerseController from "../controller/VerseController";
-import DependencyInyeccion from "../../persistence/DependencyInyeccion";
-DependencyInyeccion();
 
 const router = Router();
-const userController = container.resolve(VerseController);
+const verseController = container.resolve(VerseController);
 
-router.get("/getVerses", userController.getHeaderVerses);
-router.post('/setVerse', userController.setHeaderVerse);
+router.get("/getVerses", verseController.getHeaderVerses);
+router.post('/setVerse', verseController.setHeaderVerse);
 
 export default router;

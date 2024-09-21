@@ -10,13 +10,13 @@ import {
     where,
 } from "firebase/firestore";
 import {
-    getStorage,
     ref,
     uploadString,
     getDownloadURL,
 } from "firebase/storage";
 
 import IFirebaseHandler from "../../Application/Interfaces/IFirebaseHandler";
+import { storage } from "./firebase.config";
 
 class FirebaseHandler<T> implements IFirebaseHandler<T> {
     private _db: Firestore;
@@ -129,8 +129,8 @@ class FirebaseHandler<T> implements IFirebaseHandler<T> {
     };
 
     uploadImage = async (base64Image: string, imageName: string) => {
-        const storage = getStorage();
         const storageRef = ref(storage, `${this._collection}/images/${imageName}`);
+        base64Image = base64Image.replace(/^data:image\/[a-z]+;base64,/, '');
 
         try {
             await uploadString(storageRef, base64Image, "base64");
