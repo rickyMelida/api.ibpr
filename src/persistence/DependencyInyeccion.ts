@@ -7,6 +7,10 @@ import IVerseRepository from "../Application/Repositories/IVerseRepository";
 import VerseRepository from "./repository/VerseRepository";
 import ISectionRepository from "../Application/Repositories/ISectionRepository";
 import SectionRepository from "./repository/SectionRepository";
+import ICoverImageRepository from "../Application/Repositories/ICoverImageRepository";
+import CoverImageRepository from "./repository/CoverImageRepository";
+import IImageRepository from "../Application/Repositories/IImageRepository";
+import ImageRepository from "./repository/ImageRepository";
 
 const DependencyInyeccion = () => {
   container.register<IMainVerseRepository>("IMainVerseRepository", {
@@ -23,6 +27,14 @@ const DependencyInyeccion = () => {
 
   container.register<ISectionRepository>("ISectionRepository", {
     useClass: SectionRepository,
+  });
+
+  container.register<ICoverImageRepository>("ICoverImageRepository", {
+    useClass: CoverImageRepository,
+  });
+
+  container.register<IImageRepository>("IImageRepository", {
+    useClass: ImageRepository,
   });
 };
 

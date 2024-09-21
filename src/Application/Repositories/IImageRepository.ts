@@ -7,6 +7,7 @@ interface IImageRepository {
     Update(id: number, imageModified: Image): Promise<Image>;
     Delete(id: number): Promise<boolean>;
     GetLastIdImage(): Promise<number>;
+    GetUrlImage(base64Image: string, imageName: string): Promise<string>;
 }
 
 export default IImageRepository;

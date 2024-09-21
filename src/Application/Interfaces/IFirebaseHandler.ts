@@ -5,5 +5,5 @@ export default interface IFirebaseHandler<T> {
     getBy: (param: string, data: string) => Promise<T[]>;
     update: (id: number, newData: T) => Promise<T>;
     delete: (id: number) => Promise<void>;
-
+    uploadImage: (base64Image: string, imageName: string) => Promise<string>;
 }

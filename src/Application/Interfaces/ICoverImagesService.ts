@@ -3,7 +3,7 @@ import CoverImageRequest from "../../Domain/Request/CoverImageRequest";
 
 interface ICoverImagesService {
     GetCoverImages(): Promise<Array<CoverImagesDetails>>;
-    GetCoverImagesDetails(id: number): Promise<CoverImagesDetails>;
+    GetCoverImagesDetails(id: number): Promise<CoverImagesDetails | null>;
     SetCoverImages(coverImagesDetails: CoverImageRequest): Promise<CoverImagesDetails>;
 }
 

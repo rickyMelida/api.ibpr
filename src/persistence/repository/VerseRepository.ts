@@ -41,7 +41,7 @@ class VerseRepository implements IVerseRepository {
     async GetLastId(): Promise<number> {
         try {
             const data = await this.GetVerses();
-            const dataSorted = data.sort((a, b) => a.Id - b.Id);
+            const dataSorted = data.sort((a, b) => b.Id - a.Id);
             
             return dataSorted[0].Id
         } catch (error) {

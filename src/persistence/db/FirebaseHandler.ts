@@ -9,6 +9,13 @@ import {
     updateDoc,
     where,
 } from "firebase/firestore";
+import {
+    getStorage,
+    ref,
+    uploadString,
+    getDownloadURL,
+} from "firebase/storage";
+
 import IFirebaseHandler from "../../Application/Interfaces/IFirebaseHandler";
 
 class FirebaseHandler<T> implements IFirebaseHandler<T> {
@@ -118,6 +125,20 @@ class FirebaseHandler<T> implements IFirebaseHandler<T> {
             throw new Error(
                 `Error al eliminar los datos de ${this._collection}`
             );
+        }
+    };
+
+    uploadImage = async (base64Image: string, imageName: string) => {
+        const storage = getStorage();
+        const storageRef = ref(storage, `${this._collection}/images/${imageName}`);
+
+        try {
+            await uploadString(storageRef, base64Image, "base64");
+            const downloadURL = await getDownloadURL(storageRef);
+            return downloadURL;
+        } catch (error) {
+            console.error("Error uploading image: ", error);
+            return "";
         }
     };
 }
