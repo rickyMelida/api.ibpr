@@ -4,7 +4,7 @@ import Schedule from "../../Domain/Common/Schedule";
 interface IScheduleRepository {
     GetSchedules(): Promise<Array<Schedule>>;
     GetSchedule(id: number): Promise<Schedule>;
-    SetSchedule(schedule: Schedule): Promise<DefaultResponse>;
+    SetSchedule(schedule: Schedule): Promise<Schedule>;
 }
 
 

@@ -1,8 +1,9 @@
 import ActivityDetails from "../../Domain/Entities/ActivityDetails";
 
 interface IActivityServices {
-    GgetActivityById(activityId: number): Promise<ActivityDetails>;
-    getActivities(): Promise<ActivityDetails[]>;
+    GetActivityById(activityId: number): Promise<ActivityDetails>;
+    GetActivities(): Promise<ActivityDetails[]>;
+    SetActivity(activityDetails: ActivityDetails): Promise<ActivityDetails>;
 }
 
 export default IActivityServices;

@@ -2,8 +2,8 @@ import DependencyInyeccion from "../../persistence/DependencyInyeccion";
 DependencyInyeccion();
 
 import { Router } from "express";
-import verseRoutes from "./verse.router";
-import coverImageRoutes from "./coverImage.router";
+import verseRoutes from "./verse.routes";
+import coverImageRoutes from "./coverImage.routes";
 
 const router = Router();
 
