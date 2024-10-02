@@ -5,6 +5,7 @@ interface IScheduleRepository {
     GetSchedules(): Promise<Array<Schedule>>;
     GetSchedule(id: number): Promise<Schedule>;
     SetSchedule(schedule: Schedule): Promise<Schedule>;
+    GetLastId(): Promise<number>;
 }
 
 

@@ -20,6 +20,16 @@ class ActivityController {
         }
     }
 
+    setActivity = async (req: Request, res: Response): Promise<void> => {
+        try {
+            const activity = req.body;
+            const activityServices = await this._activityService.SetActivity(activity);
+            res.json(activityServices);
+        } catch (error) {
+            res.status(500).json({ error });
+        }
+    }
+
 }
 
 export default ActivityController;

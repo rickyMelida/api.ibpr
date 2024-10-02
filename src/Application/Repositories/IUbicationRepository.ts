@@ -6,6 +6,7 @@ interface IUbicationRepository {
     SetUbication(ubication: Ubication): Promise<Ubication>;
     UpdateUbication(id: number, ubication: Ubication): Promise<Ubication>;
     DeleteUbication(id: number): Promise<void>;
+    GetLastIdUbication(): Promise<number>;
 }
 
 export default IUbicationRepository;

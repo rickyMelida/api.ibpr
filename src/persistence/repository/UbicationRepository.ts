@@ -29,6 +29,17 @@ class UbicationRepository implements IUbicationRepository {
 
         throw new Error("Error al crear una nueva ubicacion");
     }
+
+    async GetLastIdUbication(): Promise<number> {
+        try {
+            const data = await this.GetUbications();
+            const dataSorted = data.sort((a, b) => b.Id - a.Id);
+            
+            return dataSorted[0].Id
+        } catch (error) {
+            return 0;
+        }
+    }
     
     UpdateUbication(id: number, ubication: Ubication): Promise<Ubication> {
         throw new Error("Method not implemented.");

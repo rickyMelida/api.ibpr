@@ -28,6 +28,17 @@ class ScheduleRepository implements IScheduleRepository {
 
         throw new Error("Error al crear una nueva actividad");
     }
+
+    async GetLastId(): Promise<number> {
+        try {
+            const data = await this.GetSchedules();
+            const dataSorted = data.sort((a, b) => b.Id - a.Id);
+            
+            return dataSorted[0].Id
+        } catch (error) {
+            return 0;
+        }
+    }
     
 }
 
